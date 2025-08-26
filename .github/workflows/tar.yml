@@ -87,30 +87,11 @@ jobs:
         6. 上传解压后的两个文件
         7. 配置环境变量（参考 README.md）
         8. 等待构建完成
-        
-        ### ✨ 功能特性
-        - 🚀 多协议代理节点支持
-        - 📊 nezha监控集成
-        - 🔥 cloudflared隧道服务
-        - 📱 Telegram消息推送
-        - 🌐 自动订阅生成
-        - 💚 健康检查API
-        - 🔄 301重定向到导航站
-        
-        ### 📋 主要环境变量
-        - `UUID` - 服务标识符
-        - `NAME` - 服务名称
-        - `ARGO_DOMAIN` - Argo隧道域名
-        - `ARGO_AUTH` - Argo认证信息
-        - `NEZHA_SERVER` - 哪吒监控服务器
-        - `CHAT_ID` & `BOT_TOKEN` - Telegram推送配置
-        
-        > 完整环境变量说明请查看 [README.md](https://github.com/${{ github.repository }}/blob/main/README.md)
-        
-        ### 🔗 API端点
-        - `GET /` - 重定向到导航站
+
+        ### 🔗 相关链接
+        - `GET /` - 首页
         - `GET /sub` - 获取订阅链接
-        - `GET /health` - 系统状态检查
+        - `GET /status` - 服务状态检查
         
         ---
         
@@ -142,7 +123,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ steps.get_version.outputs.version }}
-        name: "Appwrite Functions ${{ steps.get_version.outputs.version }}"
+        name: "Appwrite Functions"
         body_path: release_notes.md
         files: Appwrite-Functions.tar.gz
         draft: false
