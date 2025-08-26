@@ -2,15 +2,17 @@
 
 一个适配Appwrite Functions的Node.js代理隧道服务，支持多协议节点生成、nezha监控、Telegram推送等功能。
 
-
 ### 📱 Telegram群组
   https://t.me/eooceu
+
+
+## 部署指南
 
 ### 1. 下载部署包
 
 从[Releases](../../releases)页面下载最新的`Appwrite-Functions.tar.gz`压缩包。
 
-### 2. 上传到Appwrite
+### 2. 上传压缩包到Appwrite
 
 1. 登录 [Appwrite 控制台](https://cloud.appwrite.io)
 2. 进入 Functions 部分
@@ -25,8 +27,6 @@
 在Appwrite控制台的函数设置中添加以下环境变量：
 
 ## 📋 环境变量配置
-
-### 🔧 基础配置
 
 | 变量名 | 默认值 | 说明 |
 |--------|--------|------|
@@ -48,17 +48,17 @@
 | `CHAT_ID` | (空) | Telegram聊天ID |
 | `BOT_TOKEN` | (空) | Telegram机器人Token |
 
-## 📍 API端点
-
 ### 📋 订阅地址
 ```
-GET /sub
+# 获取订阅，${SUB_PATH}为订阅路径，默认为sub
+curl https://your-function-domain.appwrite.run/${SUB_PATH}
 ```
 返回base64编码的节点订阅信息
 
 ### 💚 健康检查
 ```
-GET /health
+# 健康检查
+curl https://your-function-domain.appwrite.run/status
 ```
 返回详细的系统状态信息，包括：
 - 服务状态
@@ -66,15 +66,7 @@ GET /health
 - 内存使用情况
 - 系统信息
 
-### 访问示例
-
-```bash
-# 健康检查
-curl https://your-function-domain.appwrite.run/status
-
-# 获取订阅
-curl https://your-function-domain.appwrite.run/${SUB_PATH}
-```
+---
 
 ## 📄 许可证
 
@@ -84,3 +76,4 @@ MIT License
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
