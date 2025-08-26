@@ -70,9 +70,10 @@ curl https://your-appwrite-domain/status
 
 ## 📄 许可证
 
-MIT License
+GPL-3.0
 
 ---
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
