@@ -1,10 +1,15 @@
-name: Auto Tar and Release
+name: Build and Release Appwrite
 
 on:
   push:
     tags:
       - 'v*.*.*'
   workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+  actions: read
 
 jobs:
   build-and-release:
@@ -115,25 +120,34 @@ jobs:
     - name: Extract version from tag
       id: get_version
       run: |
-        if [[ $GITHUB_REF == refs/tags/* ]]; then
-          VERSION=${GITHUB_REF#refs/tags/}
+        if [[ "${{ github.ref_type }}" == "tag" ]]; then
+          VERSION="${{ github.ref_name }}"
         else
-          VERSION="latest"
+          VERSION="$(date +%Y%m%d)-$(echo $GITHUB_SHA | cut -c1-7)"
         fi
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "📋 Version: $VERSION"
         
+    - name: Debug information
+      run: |
+        echo "🔍 Debug information:"
+        echo "GitHub Ref: ${{ github.ref }}"
+        echo "GitHub Ref Type: ${{ github.ref_type }}"
+        echo "GitHub Ref Name: ${{ github.ref_name }}"
+        echo "GitHub Event Name: ${{ github.event_name }}"
+        echo "GitHub Repository: ${{ github.repository }}"
+        echo "GitHub Token available: ${{ secrets.GITHUB_TOKEN != '' }}"
+        
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ steps.get_version.outputs.version }}
-        name: "Appwrite Functions v${{ steps.get_version.outputs.version }}"
+        name: "Appwrite Functions ${{ steps.get_version.outputs.version }}"
         body_path: release_notes.md
-        files: |
-          Appwrite-Functions.tar.gz
+        files: Appwrite-Functions.tar.gz
         draft: false
         prerelease: false
-        generate_release_notes: false
+        make_latest: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
