@@ -45,8 +45,8 @@
 | `UPLOAD_URL` |  | 节点上传地址 |
 | `PROJECT_URL` |  | 项目访问地址 |
 | `AUTO_ACCESS` | `false` | 自动访问保活 |
-| `CHAT_ID` | (空) | Telegram聊天ID |
-| `BOT_TOKEN` | (空) | Telegram机器人Token |
+| `CHAT_ID` |  | Telegram聊天ID |
+| `BOT_TOKEN` |  | Telegram机器人Token |
 
 ### 📋 订阅地址
 ```
@@ -76,4 +76,5 @@ MIT License
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
