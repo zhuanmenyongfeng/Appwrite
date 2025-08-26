@@ -1,6 +1,6 @@
 # Proxy Service for Appwrite Functions
 
-一个适配Appwrite Functions的Node.js代理隧道服务，支持多协议节点生成、nezha监控、Telegram推送等功能。
+一个适配Appwrite Functions的Nodejs代理隧道服务，自动生成节点订阅、支持nezha监控、Telegram推送等功能。
 
 ### 📱 Telegram群组
   https://t.me/eooceu
@@ -76,5 +76,6 @@ MIT License
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
 
