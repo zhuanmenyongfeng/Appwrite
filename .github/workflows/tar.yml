@@ -1,0 +1,152 @@
+name: Auto Tar and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Validate required files
+      run: |
+        if [ ! -f "index.js" ]; then
+          echo "❌ index.js not found!"
+          exit 1
+        fi
+        if [ ! -f "package.json" ]; then
+          echo "❌ package.json not found!"
+          exit 1
+        fi
+        echo "✅ Required files found"
+        
+    - name: Display file info
+      run: |
+        echo "📋 Files to be packaged:"
+        echo "📄 index.js ($(wc -l < index.js) lines, $(du -h index.js | cut -f1))"
+        echo "📄 package.json ($(du -h package.json | cut -f1))"
+        echo ""
+        echo "📦 Package.json content:"
+        cat package.json
+        
+    - name: Create package directory
+      run: |
+        mkdir -p appwrite-functions
+        
+    - name: Copy files to package directory
+      run: |
+        cp index.js appwrite-functions/
+        cp package.json appwrite-functions/
+        echo "✅ Files copied to package directory"
+        
+    - name: Create deployment archive
+      run: |
+        cd appwrite-functions
+        tar -czf ../Appwrite-Functions.tar.gz index.js package.json
+        cd ..
+        echo "📦 Archive created: Appwrite-Functions.tar.gz"
+        echo "📊 Archive size: $(du -h Appwrite-Functions.tar.gz | cut -f1)"
+        
+    - name: Verify archive contents
+      run: |
+        echo "🔍 Archive contents:"
+        tar -tzf Appwrite-Functions.tar.gz
+        
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        cat > release_notes.md << 'EOF'
+        ## 🚀 Appwrite Functions 部署包
+        
+        ### 📦 包含文件
+        - `index.js` - 主函数文件（适配Appwrite Functions）
+        - `package.json` - 依赖配置文件
+        
+        ### 🛠️ 部署步骤
+        1. 下载 `Appwrite-Functions.tar.gz` 压缩包
+        2. 解压得到 `index.js` 和 `package.json`
+        3. 登录 [Appwrite 控制台](https://cloud.appwrite.io)
+        4. 进入 Functions 部分，创建新部署
+        5. 选择 Manual 上传方式
+        6. 上传解压后的两个文件
+        7. 配置环境变量（参考 README.md）
+        8. 等待构建完成
+        
+        ### ✨ 功能特性
+        - 🚀 多协议代理节点支持
+        - 📊 nezha监控集成
+        - 🔥 cloudflared隧道服务
+        - 📱 Telegram消息推送
+        - 🌐 自动订阅生成
+        - 💚 健康检查API
+        - 🔄 301重定向到导航站
+        
+        ### 📋 主要环境变量
+        - `UUID` - 服务标识符
+        - `NAME` - 服务名称
+        - `ARGO_DOMAIN` - Argo隧道域名
+        - `ARGO_AUTH` - Argo认证信息
+        - `NEZHA_SERVER` - 哪吒监控服务器
+        - `CHAT_ID` & `BOT_TOKEN` - Telegram推送配置
+        
+        > 完整环境变量说明请查看 [README.md](https://github.com/${{ github.repository }}/blob/main/README.md)
+        
+        ### 🔗 API端点
+        - `GET /` - 重定向到导航站
+        - `GET /sub` - 获取订阅链接
+        - `GET /health` - 系统状态检查
+        
+        ---
+        
+        ⭐ **快速开始**: 下载压缩包 → 解压 → 上传到Appwrite → 配置环境变量 → 部署完成！
+        EOF
+        
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        if [[ $GITHUB_REF == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/}
+        else
+          VERSION="latest"
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "📋 Version: $VERSION"
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.get_version.outputs.version }}
+        name: "Appwrite Functions v${{ steps.get_version.outputs.version }}"
+        body_path: release_notes.md
+        files: |
+          Appwrite-Functions.tar.gz
+        draft: false
+        prerelease: false
+        generate_release_notes: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Release Summary
+      run: |
+        echo "🎉 Release completed successfully!"
+        echo "📦 Package: Appwrite-Functions.tar.gz"
+        echo "🏷️ Version: ${{ steps.get_version.outputs.version }}"
+        echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.version }}"
+        echo ""
+        echo "📋 Next steps:"
+        echo "1. Download the Appwrite-Functions.tar.gz from the release"
+        echo "2. Extract index.js and package.json"
+        echo "3. Upload to Appwrite Functions"
+        echo "4. Configure environment variables"
+        echo "5. Deploy and test!"
