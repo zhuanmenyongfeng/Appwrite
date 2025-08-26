@@ -2,6 +2,10 @@
 
 一个适配Appwrite Functions的Node.js代理隧道服务，支持多协议节点生成、nezha监控、Telegram推送等功能。
 
+
+### 📱 Telegram群组
+  https://t.me/eooceu
+
 ### 1. 下载部署包
 
 从[Releases](../../releases)页面下载最新的`Appwrite-Functions.tar.gz`压缩包。
@@ -28,48 +32,19 @@
 |--------|--------|------|
 | `UUID` | `48345715-9e60-427a-98db-5e616cbba039` | 节点UUID |
 | `NAME` | `Appwrite` | 服务名称 |
-| `FILE_PATH` | `./.npm` | 文件存储路径 |
+| `FILE_PATH` | `./.npm` | 节点存储路径 |
 | `SUB_PATH` | `sub` | 订阅路径 |
-| `PORT` | `3000` | 服务端口 |
-
-### 🌐 网络配置
-
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
-| `CFIP` | `cdns.doon.eu.org` | CloudFlare IP |
+| `CFIP` | `cf.877774.xyz` | 优选域名或优选ip |
 | `CFPORT` | `443` | CloudFlare 端口 |
-| `ARGO_PORT` | `8001` | Argo 隧道端口 |
-| `ARGO_DOMAIN` | `` | Argo 隧道域名 |
-| `ARGO_AUTH` | (长字符串) | Argo 隧道认证 |
-
-### 🔌 协议端口配置
-
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
-| `TUIC_PORT` | (空) | TUIC协议端口 |
-| `HY2_PORT` | (空) | Hysteria2协议端口 |
-| `REALITY_PORT` | (空) | Reality协议端口 |
-
-### 📊 监控配置
-
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
-| `NEZHA_SERVER` | `nezha.ggff.net:8008` | 哪吒监控服务器 |
-| `NEZHA_PORT` | (空) | 哪吒监控端口 |
-| `NEZHA_KEY` | `nezha123@` | 哪吒监控密钥 |
-
-### 🔗 外部服务配置
-
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
-| `UPLOAD_URL` | (空) | 节点上传地址 |
-| `PROJECT_URL` | (空) | 项目访问地址 |
+| `ARGO_PORT` | `8001` | Argo隧道端口,使用token需再cf里设置一致 |
+| `ARGO_DOMAIN` |  | Argo 隧道域名,留空即使用临时隧道 |
+| `ARGO_AUTH` |  | Argo隧道密钥token或json |
+| `NEZHA_SERVER` |  | 哪吒v0: nezha.xxx.com  v1: nezha.xxx.com:8008|
+| `NEZHA_PORT` |  | 哪吒v1请留空|
+| `NEZHA_KEY` |  | 哪吒监控密钥 |
+| `UPLOAD_URL` |  | 节点上传地址 |
+| `PROJECT_URL` |  | 项目访问地址 |
 | `AUTO_ACCESS` | `false` | 自动访问保活 |
-
-### 📱 Telegram节点推送配置
-
-| 变量名 | 默认值 | 说明 |
-|--------|--------|------|
 | `CHAT_ID` | (空) | Telegram聊天ID |
 | `BOT_TOKEN` | (空) | Telegram机器人Token |
 
@@ -106,5 +81,6 @@ curl https://your-function-domain.appwrite.run/${SUB_PATH}
 MIT License
 
 ---
+
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
