@@ -1,0 +1,19 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "Appwrite Functions",
+  "main": "index.js",
+  "author": "eooce",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "latest",
+    "dotenv": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
