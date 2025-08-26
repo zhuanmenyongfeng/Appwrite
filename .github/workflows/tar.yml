@@ -95,7 +95,7 @@ jobs:
         
         ---
         
-        ⭐ **快速开始**: 下载压缩包 → 解压 → 上传到Appwrite → 配置环境变量 → 部署完成！
+        ⭐ **快速开始**: 下载压缩包 → 上传到Appwrite → 配置环境变量 → 部署完成！
         EOF
         
     - name: Extract version from tag
