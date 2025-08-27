@@ -2,8 +2,7 @@ name: Build and Release Appwrite
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches: [ main, master ]
     paths:
       - 'src/main.js'
       - 'package.json'
@@ -16,12 +15,13 @@ permissions:
 
 jobs:
   build-and-release:
-    if: contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
       
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -76,41 +76,57 @@ jobs:
         echo "🔍 Archive contents:"
         tar -tzf Appwrite-Functions.tar.gz
         
+    - name: Auto-create version tag
+      id: auto_tag
+      run: |
+        # 获取当前时间作为版本号
+        TIMESTAMP=$(date +%Y%m%d%H%M%S)
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        NEW_VERSION="v1.0.${TIMESTAMP}-${SHORT_SHA}"
+        
+        # 创建新标签
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a $NEW_VERSION -m "Auto-generated version for changes in src/main.js or package.json"
+        git push origin $NEW_VERSION
+        
+        echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "🏷️ 自动创建标签: $NEW_VERSION"
+        
     - name: Generate release notes
       id: release_notes
       run: |
-        cat > release_notes.md << 'EOF'
-        ## 🚀 Appwrite Functions 部署包
+        # 获取最近的提交信息
+        LATEST_COMMIT=$(git log -1 --pretty=format:"%s")
+        COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
         
-        ⭐ **快速开始**: 创建Functions → 配置环境变量 → 下载压缩包 → 上传压缩包到Appwrite → 等待部署完成！
+        cat > release_notes.md << EOF
+        ## 🚀 Appwrite Functions 自动部署包
+        
+        ### 📝 最近更改
+        - **提交信息**: $LATEST_COMMIT
+        - **作者**: $COMMIT_AUTHOR
+        - **自动构建时间**: $(date +"%Y-%m-%d %H:%M:%S")
+        
+        ### ⭐ 使用说明
+        1. 下载下方的压缩包
+        2. 在Appwrite控制台创建Function
+        3. 上传此压缩包
+        4. 配置所需的环境变量
+        5. 部署并测试功能
+        
+        ### 📦 包含文件
+        - src/main.js (主程序文件)
+        - package.json (依赖配置)
+        
+        *此版本由GitHub Actions自动生成*
         EOF
-        
-    - name: Extract version from tag
-      id: get_version
-      run: |
-        if [[ "${{ github.ref_type }}" == "tag" ]]; then
-          VERSION="${{ github.ref_name }}"
-        else
-          VERSION="$(date +%Y%m%d)-$(echo $GITHUB_SHA | cut -c1-7)"
-        fi
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-        echo "📋 Version: $VERSION"
-        
-    - name: Debug information
-      run: |
-        echo "🔍 Debug information:"
-        echo "GitHub Ref: ${{ github.ref }}"
-        echo "GitHub Ref Type: ${{ github.ref_type }}"
-        echo "GitHub Ref Name: ${{ github.ref_name }}"
-        echo "GitHub Event Name: ${{ github.event_name }}"
-        echo "GitHub Repository: ${{ github.repository }}"
-        echo "GitHub Token available: ${{ secrets.GITHUB_TOKEN != '' }}"
         
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ steps.get_version.outputs.version }}
-        name: "Appwrite Functions"
+        tag_name: ${{ steps.auto_tag.outputs.version }}
+        name: "Appwrite Functions ${{ steps.auto_tag.outputs.version }}"
         body_path: release_notes.md
         files: Appwrite-Functions.tar.gz
         draft: false
@@ -121,14 +137,14 @@ jobs:
         
     - name: Release Summary
       run: |
-        echo "🎉 Release completed successfully!"
-        echo "📦 Package: Appwrite-Functions.tar.gz"
-        echo "🏷️ Version: ${{ steps.get_version.outputs.version }}"
-        echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.version }}"
+        echo "🎉 自动构建和发布完成!"
+        echo "📦 包文件: Appwrite-Functions.tar.gz"
+        echo "🏷️ 版本: ${{ steps.auto_tag.outputs.version }}"
+        echo "🔗 发布地址: https://github.com/${{ github.repository }}/releases/tag/${{ steps.auto_tag.outputs.version }}"
         echo ""
-        echo "📋 Next steps:"
-        echo "1. Download the Appwrite-Functions.tar.gz from the release"
-        echo "2. Extract src/main.js and package.json"
-        echo "3. Upload to Appwrite Functions"
-        echo "4. Configure environment variables"
-        echo "5. Deploy and test!"
+        echo "📋 下一步操作:"
+        echo "1. 前往Release页面下载压缩包"
+        echo "2. 在Appwrite中创建或更新Function"
+        echo "3. 上传下载的压缩包"
+        echo "4. 配置环境变量"
+        echo "5. 部署并测试功能"
