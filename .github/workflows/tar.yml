@@ -1,13 +1,9 @@
-name: Build and Release Appwrite Functions
+name: Build and Release Appwrite
 
 on:
   push:
     tags:
       - 'v*.*.*'
-    paths:
-      - 'src/main.js'
-      - 'package.json'
-  pull_request:
     paths:
       - 'src/main.js'
       - 'package.json'
@@ -19,74 +15,7 @@ permissions:
   actions: read
 
 jobs:
-  auto-build:
-    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/') || github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        
-    - name: Validate required files
-      run: |
-        if [ ! -d "src" ]; then
-          echo "❌ src folder not found!"
-          exit 1
-        fi
-        if [ ! -f "src/main.js" ]; then
-          echo "❌ src/main.js not found!"
-          exit 1
-        fi
-        if [ ! -f "package.json" ]; then
-          echo "❌ package.json not found!"
-          exit 1
-        fi
-        echo "✅ Required files found"
-        
-    - name: Display file changes
-      run: |
-        echo "🔍 Triggered by file changes:"
-        if [ "${{ github.event_name }}" == "push" ]; then
-          echo "📝 Changed files in this push:"
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} || echo "Unable to detect changes"
-        elif [ "${{ github.event_name }}" == "pull_request" ]; then
-          echo "📝 Changed files in this PR:"
-          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} || echo "Unable to detect changes"
-        fi
-        echo ""
-        echo "📄 Current file status:"
-        echo "📄 src/main.js ($(wc -l < src/main.js) lines, $(du -h src/main.js | cut -f1))"
-        echo "📄 package.json ($(du -h package.json | cut -f1))"
-        
-    - name: Test build process
-      run: |
-        echo "🧪 Testing build process..."
-        mkdir -p test-build
-        cp -r src/ test-build/
-        cp package.json test-build/
-        cd test-build
-        tar -czf ../test-build.tar.gz src/ package.json
-        cd ..
-        echo "✅ Build test successful"
-        echo "📊 Test archive size: $(du -h test-build.tar.gz | cut -f1)"
-        rm -rf test-build test-build.tar.gz
-        
-    - name: Build summary
-      run: |
-        echo "📋 Auto-build completed!"
-        echo "🎯 Trigger: ${{ github.event_name }}"
-        echo "🌿 Branch: ${{ github.ref_name }}"
-        echo "💡 This was an automatic build triggered by file changes."
-        echo "📦 To create a release, push a version tag (e.g., v1.0.0)"
-
-  # 正式发布作业 - 当推送版本标签时触发
   build-and-release:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     
     steps:
@@ -100,12 +29,8 @@ jobs:
         
     - name: Validate required files
       run: |
-        if [ ! -d "src" ]; then
-          echo "❌ src folder not found!"
-          exit 1
-        fi
         if [ ! -f "src/main.js" ]; then
-          echo "❌ src/main.js not found!"
+          echo "❌ index.js not found!"
           exit 1
         fi
         if [ ! -f "package.json" ]; then
@@ -117,9 +42,8 @@ jobs:
     - name: Display file info
       run: |
         echo "📋 Files to be packaged:"
-        echo "📁 src/ folder:"
         ls -la src/
-        echo "📄 src/main.js ($(wc -l < src/main.js) lines, $(du -h src/main.js | cut -f1))"
+        echo "📄 main.js ($(wc -l < src/main.js) lines, $(du -h index.js | cut -f1))"
         echo "📄 package.json ($(du -h package.json | cut -f1))"
         echo ""
         echo "📦 Package.json content:"
@@ -131,16 +55,14 @@ jobs:
         
     - name: Copy files to package directory
       run: |
-        cp -r src/ appwrite-functions/
+        cp index.js appwrite-functions/
         cp package.json appwrite-functions/
         echo "✅ Files copied to package directory"
-        echo "📁 Package directory contents:"
-        ls -la appwrite-functions/
         
     - name: Create deployment archive
       run: |
         cd appwrite-functions
-        tar -czf ../Appwrite-Functions.tar.gz src/ package.json
+        tar -czf ../Appwrite-Functions.tar.gz index.js package.json
         cd ..
         echo "📦 Archive created: Appwrite-Functions.tar.gz"
         echo "📊 Archive size: $(du -h Appwrite-Functions.tar.gz | cut -f1)"
@@ -156,31 +78,7 @@ jobs:
         cat > release_notes.md << 'EOF'
         ## 🚀 Appwrite Functions 部署包
         
-        ### 📦 包含文件
-        - `src/` - 源代码文件夹
-          - `src/main.js` - 主要业务逻辑文件
-        - `package.json` - 依赖配置文件
-        
-        ### 🛠️ 部署步骤
-        1. 创建Functions并配置环境变量
-        2. 下载 `Appwrite-Functions.tar.gz` 压缩包
-        3. 登录 [Appwrite 控制台](https://cloud.appwrite.io)
-        4. 进入 Functions 部分，创建新部署
-        5. 选择 Manual 上传方式
-        6. 上传压缩包到Appwrite
-        7. 等待构建完成
-        
-        
-        > 完整环境变量说明请查看 [README.md](https://github.com/${{ github.repository }}/blob/main/README.md)
-        
-        ### 🔗 API端点
-        - `GET /` - 重定向到导航站
-        - `GET /sub 或 /${SUB_PATH}` - 获取订阅链接
-        - `GET /status` - 服务状态
-        
-        ---
-        
-        ⭐ **快速开始**: 创建Functions → 配置环境变量 → 下载压缩包  → 上传压缩包到Appwrite → 等待自动部署完成！
+        ⭐ **快速开始**: 创建Functions → 配置环境变量 → 下载压缩包 → 上传压缩包到Appwrite → 等待部署完成！
         EOF
         
     - name: Extract version from tag
@@ -205,11 +103,10 @@ jobs:
         echo "GitHub Token available: ${{ secrets.GITHUB_TOKEN != '' }}"
         
     - name: Create Release
-      if: github.ref_type == 'tag'
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ steps.get_version.outputs.version }}
-        name: "Appwrite Functions "
+        name: "Appwrite Functions"
         body_path: release_notes.md
         files: Appwrite-Functions.tar.gz
         draft: false
@@ -218,16 +115,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Manual deployment info
-      if: github.event_name == 'workflow_dispatch'
-      run: |
-        echo "📦 Manual deployment package created successfully!"
-        echo "📁 Package: Appwrite-Functions.tar.gz"
-        echo "💡 This was a manual build. No release created."
-        echo "📋 To create a release, push a version tag (e.g., git tag v1.0.0 && git push origin v1.0.0)"
-        
     - name: Release Summary
-      if: github.ref_type == 'tag'
       run: |
         echo "🎉 Release completed successfully!"
         echo "📦 Package: Appwrite-Functions.tar.gz"
@@ -236,7 +124,7 @@ jobs:
         echo ""
         echo "📋 Next steps:"
         echo "1. Download the Appwrite-Functions.tar.gz from the release"
-        echo "2. Extract src/ folder and package.json"
+        echo "2. Extract index.js and package.json"
         echo "3. Upload to Appwrite Functions"
         echo "4. Configure environment variables"
         echo "5. Deploy and test!"
