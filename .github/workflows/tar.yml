@@ -30,7 +30,7 @@ jobs:
     - name: Validate required files
       run: |
         if [ ! -f "src/main.js" ]; then
-          echo "❌ index.js not found!"
+          echo "❌ main.js not found!"
           exit 1
         fi
         if [ ! -f "package.json" ]; then
@@ -42,8 +42,9 @@ jobs:
     - name: Display file info
       run: |
         echo "📋 Files to be packaged:"
+        echo "📁 src/ folder:"
         ls -la src/
-        echo "📄 main.js ($(wc -l < src/main.js) lines, $(du -h index.js | cut -f1))"
+        echo "📄 src/main.js ($(wc -l < src/main.js) lines, $(du -h src/main.js | cut -f1))"
         echo "📄 package.json ($(du -h package.json | cut -f1))"
         echo ""
         echo "📦 Package.json content:"
