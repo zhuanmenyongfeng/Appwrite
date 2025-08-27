@@ -1,17 +1,16 @@
 {
   "name": "nodejs",
   "version": "1.0.0",
-  "description": "Appwrite Functions",
-  "main": "index.js",
+  "description": "Appwrite",
+  "main": "src/main.js",
   "author": "eooce",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/main.js"
   },
   "dependencies": {
-    "axios": "latest",
-    "dotenv": "latest"
+    "axios": "latest"
   },
   "engines": {
     "node": ">=18"
