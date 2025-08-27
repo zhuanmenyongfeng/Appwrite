@@ -156,6 +156,11 @@ jobs:
         cat > release_notes.md << 'EOF'
         ## 🚀 Appwrite Functions 部署包
         
+        ### 📦 包含文件
+        - `src/` - 源代码文件夹
+          - `src/main.js` - 主要业务逻辑文件
+        - `package.json` - 依赖配置文件
+        
         ### 🛠️ 部署步骤
         1. 创建Functions并配置环境变量
         2. 下载 `Appwrite-Functions.tar.gz` 压缩包
@@ -200,10 +205,11 @@ jobs:
         echo "GitHub Token available: ${{ secrets.GITHUB_TOKEN != '' }}"
         
     - name: Create Release
+      if: github.ref_type == 'tag'
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: "Appwrite Functions"
-        name: "Appwrite Functions"
+        tag_name: ${{ steps.get_version.outputs.version }}
+        name: "Appwrite Functions "
         body_path: release_notes.md
         files: Appwrite-Functions.tar.gz
         draft: false
@@ -212,7 +218,16 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
+    - name: Manual deployment info
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        echo "📦 Manual deployment package created successfully!"
+        echo "📁 Package: Appwrite-Functions.tar.gz"
+        echo "💡 This was a manual build. No release created."
+        echo "📋 To create a release, push a version tag (e.g., git tag v1.0.0 && git push origin v1.0.0)"
+        
     - name: Release Summary
+      if: github.ref_type == 'tag'
       run: |
         echo "🎉 Release completed successfully!"
         echo "📦 Package: Appwrite-Functions.tar.gz"
