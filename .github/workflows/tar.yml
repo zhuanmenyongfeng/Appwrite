@@ -56,7 +56,7 @@ jobs:
         
     - name: Copy files to package directory
       run: |
-        cp index.js appwrite-functions/
+        cp src appwrite-functions/ 
         cp package.json appwrite-functions/
         echo "✅ Files copied to package directory"
         
@@ -125,7 +125,7 @@ jobs:
         echo ""
         echo "📋 Next steps:"
         echo "1. Download the Appwrite-Functions.tar.gz from the release"
-        echo "2. Extract index.js and package.json"
+        echo "2. Extract src/main.js and package.json"
         echo "3. Upload to Appwrite Functions"
         echo "4. Configure environment variables"
         echo "5. Deploy and test!"
