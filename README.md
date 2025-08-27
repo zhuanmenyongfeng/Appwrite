@@ -51,14 +51,14 @@
 ### 📋 订阅地址
 ```
 # 获取订阅，${SUB_PATH}为订阅路径，默认为sub
-curl https://your-appwrite-domain/${SUB_PATH}
+https://your-appwrite-domain/${SUB_PATH}
 ```
 返回base64编码的节点订阅信息
 
 ### 💚 健康检查
 ```
 # 健康检查
-curl https://your-appwrite-domain/status
+https://your-appwrite-domain/status
 ```
 返回详细的系统状态信息，包括：
 - 服务状态
@@ -76,4 +76,5 @@ GPL-3.0
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
