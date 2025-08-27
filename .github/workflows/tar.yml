@@ -16,6 +16,7 @@ permissions:
 
 jobs:
   build-and-release:
+    if: contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     
     steps:
