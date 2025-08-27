@@ -56,9 +56,11 @@ jobs:
         
     - name: Copy files to package directory
       run: |
-        cp src appwrite-functions/ 
+        cp -r src/ appwrite-functions/
         cp package.json appwrite-functions/
         echo "✅ Files copied to package directory"
+        echo "📁 Package directory contents:"
+        ls -la appwrite-functions/
         
     - name: Create deployment archive
       run: |
