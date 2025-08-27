@@ -80,7 +80,7 @@ function cleanupOldFiles() {
   });
 }
 
-// 生成xr-ay配置文件
+// 生成配置文件
 const config = {
   log: { access: '/dev/null', error: '/dev/null', loglevel: 'none' },
   inbounds: [
