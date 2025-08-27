@@ -63,7 +63,7 @@ jobs:
     - name: Create deployment archive
       run: |
         cd appwrite-functions
-        tar -czf ../Appwrite-Functions.tar.gz index.js package.json
+        tar -czf ../Appwrite-Functions.tar.gz src/main.js package.json
         cd ..
         echo "📦 Archive created: Appwrite-Functions.tar.gz"
         echo "📊 Archive size: $(du -h Appwrite-Functions.tar.gz | cut -f1)"
