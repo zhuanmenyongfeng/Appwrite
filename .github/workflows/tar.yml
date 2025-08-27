@@ -81,36 +81,26 @@ jobs:
         LATEST_COMMIT=$(git log -1 --pretty=format:"%s")
         COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
         COMMIT_DATE=$(git log -1 --pretty=format:"%cd" --date=format:"%Y-%m-%d %H:%M")
+        SHORT_SHA=$(git rev-parse --short HEAD)
         
         cat > release_notes.md << EOF
         ## 🚀 Appwrite Functions 部署包
-        
-        ### 📝 最近更改
-        - **提交信息**: $LATEST_COMMIT
-        - **作者**: $COMMIT_AUTHOR
-        - **提交时间**: $COMMIT_DATE
-        - **构建时间**: $(date +"%Y-%m-%d %H:%M:%S")
 
         ⭐ 快速开始: 创建Functions → 配置环境变量 → 下载压缩包 → 上传压缩包到Appwrite → 等待部署完成！
         
-        *此版本由GitHub Actions自动生成*
         EOF
         
-    - name: Get current timestamp
-      id: timestamp
-      run: |
-        echo "timestamp=$(date +%Y%m%d%H%M%S)" >> $GITHUB_OUTPUT
-        
-    - name: Create Release
+    - name: Create or Update Release
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: "appwrite-functions-latest"
         name: "Appwrite Functions"
         body_path: release_notes.md
         files: Appwrite-Functions.tar.gz
         draft: false
         prerelease: false
         make_latest: true
-        tag_name: "release-${{ steps.timestamp.outputs.timestamp }}"
+        overwrite: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -119,4 +109,4 @@ jobs:
         echo "🎉 自动构建和发布完成!"
         echo "📦 包文件: Appwrite-Functions.tar.gz"
         echo "🏷️ 发布名称: Appwrite Functions"
-        echo "🔗 发布地址: https://github.com/${{ github.repository }}/releases"
+        echo "🔗 发布地址: https://github.com/${{ github.repository }}/releases/tag/appwrite-functions-latest"
