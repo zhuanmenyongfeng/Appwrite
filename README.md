@@ -15,8 +15,8 @@
 ### 2. 上传压缩包到Appwrite
 
 1. 登录 [Appwrite 控制台](https://cloud.appwrite.io)
-2. 进入 Functions 部分
-3. 创建新函数或选择现有函数
+2. 创建project进入左侧Functions菜单
+3. 创建新Functions或选择现有函数
 4. 点击 "Create deployment"
 5. 选择 "Manual" 上传方式
 6. 上传Appwrite-Functions.tar.gz压缩包
@@ -44,7 +44,7 @@
 | `NEZHA_KEY` |  | 哪吒监控密钥 |
 | `UPLOAD_URL` |  | 节点上传地址 |
 | `PROJECT_URL` |  | 项目访问地址 |
-| `AUTO_ACCESS` | `false` | 自动访问保活 |
+| `AUTO_ACCESS` | `true` | 自动访问保活 |
 | `CHAT_ID` |  | Telegram聊天ID |
 | `BOT_TOKEN` |  | Telegram机器人Token |
 
@@ -62,7 +62,8 @@ https://your-appwrite-domain/status
 ```
 返回详细的系统状态信息，包括：
 - 服务状态
-- 上海时间戳
+- 时间戳
+- 在线时常
 - 内存使用情况
 - 系统信息
 
@@ -76,5 +77,6 @@ GPL-3.0
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
 
