@@ -2,9 +2,9 @@
 
 一个适配Appwrite Functions的Nodejs代理隧道服务，自动生成节点订阅、支持nezha监控、Telegram推送等功能。
 
-### 📱 Telegram群组
-  https://t.me/eooceu
-
+-
+📱 Telegram反馈交流群组: https://t.me/eooceu
+youtube 频道：https://www.youtube.com/@eooce
 
 ## 部署指南
 
@@ -55,7 +55,7 @@ https://your-appwrite-domain/${SUB_PATH}
 ```
 返回base64编码的节点订阅信息
 
-### 💚 健康检查
+### 💚 状态检查
 ```
 # 健康检查
 https://your-appwrite-domain/status
@@ -73,10 +73,16 @@ https://your-appwrite-domain/status
 
 GPL-3.0
 
+## 郑重声明
+* 禁止新建项目将代码复制到自己仓库中用做商业行为，违者必究
+* 用于商业行为的任何分支必须完整保留本项目说明，违者必究
+* 请遵守当地法律法规,禁止滥用做公共代理行为
+
 ---
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
 
 
