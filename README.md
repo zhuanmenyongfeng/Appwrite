@@ -14,7 +14,7 @@
 
 ### 2. 上传压缩包到Appwrite
 
-1. 登录 [Appwrite 控制台](https://cloud.appwrite.io)
+1. 注册并登录 [Appwrite 控制台](https://cloud.appwrite.io)
 2. 创建project进入左侧Functions菜单
 3. 创建新Functions或选择现有函数
 4. 点击 "Create deployment"
@@ -83,6 +83,7 @@ GPL-3.0
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
 
 
