@@ -4,7 +4,7 @@
 
 
 * 📱 Telegram反馈交流群组: https://t.me/eooceu
-* youtube 频道：https://www.youtube.com/@eooce
+* 视频教程：https://youtu.be/FJl9rYrc_JM
 
 ## 部署指南
 
@@ -83,6 +83,7 @@ GPL-3.0
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
 
 
