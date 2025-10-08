@@ -1,4 +1,4 @@
-# Appwrite(<span style="color:red;">温馨提示：能不挂哪吒就不挂</span>)
+# Appwrite<span style="color:red;">(温馨提示：能不挂哪吒就不挂)</span>
 
 一个适配Appwrite Functions的隧道代理服务，自动生成节点订阅、支持nezha监控、Telegram推送等功能。
 
@@ -83,6 +83,7 @@ GPL-3.0
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
 
 
