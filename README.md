@@ -9,7 +9,7 @@
 ## 部署指南
 
 ### 1. 下载部署包
-1. fork项目，在actions菜单里允许工作流，修改`src/main.js`里的环境变量后会自动打包
+1. fork项目，在actions菜单里允许工作流，修改`src/main.js`文件里的环境变量后会自动打包
 2. 从[Releases](../../releases)页面下载专属的`Appwrite.tar.gz`压缩包。
 
 ### 2. 上传压缩包到Appwrite
@@ -83,6 +83,7 @@ GPL-3.0
 
 
 ⭐ 如果这个项目对你有帮助，请给个Star！
+
 
 
 
